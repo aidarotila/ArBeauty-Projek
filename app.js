@@ -105,14 +105,76 @@ $('#ck').onclick = () => {
 
       <button class="btn" type="submit"
         style="width:100%;margin-top:12px">
-        Konfirmasi Pesanans
+        Konfirmasi Pesanan
       </button>
     </form>
   `);
 };
 
 $('#ub').onclick=()=>user?show(`<h3>Halo, ${user.name}!</h3><p>${user.email}</p><button class="btn o" id="lo" style="width:100%">Keluar</button>`):show(`<h3>Masuk / Daftar</h3><p>Buat akun demo untuk pengalaman belanja yang lebih personal.</p><form id="af"><input class="fi" name="n" placeholder="Nama lengkap" required><input class="fi" name="e" type="email" placeholder="Email" required><button class="btn">Lanjutkan</button></form>`);
-dlg.addEventListener('submit',e=>{if(e.target.id==='af'){e.preventDefault();const f=new FormData(e.target);user={name:f.get('n').trim(),email:f.get('e').trim()};sv('arUser',user);dlg.close();draw();toast(`Selamat datang, ${user.name.split(' ')[0]}!`)}});
+dlg.addEventListener('change', e => {
+  if (e.target.id === 'pm') {
+    const bankWrap = $('#bankWrap');
+    const bank = $('#bank');
+    const isBank = e.target.value === 'Transfer Bank';
+
+    bankWrap.hidden = !isBank;
+    bank.required = isBank;
+
+    if (!isBank) bank.value = '';
+  }
+});
+
+dlg.addEventListener('submit', e => {
+  if (e.target.id === 'af') {
+    e.preventDefault();
+    const f = new FormData(e.target);
+
+    user = {
+      name: f.get('n').trim(),
+      email: f.get('e').trim()
+    };
+
+    sv('arUser', user);
+    dlg.close();
+    draw();
+    toast(`Selamat datang, ${user.name.split(' ')[0]}!`);
+    return;
+  }
+
+  if (e.target.id === 'pf') {
+    e.preventDefault();
+
+    const method = e.target.querySelector('[name="method"]').value;
+    const bank = $('#bank').value;
+
+    if (method === 'Transfer Bank' && !bank) {
+      alert('Silakan pilih bank terlebih dahulu.');
+      return;
+    }
+
+    const orderTotal = total();
+
+    cart = {};
+    save();
+
+    dlg.close();
+    cd(false);
+
+    show(`
+      <h3>Terima Kasih Telah Berbelanja di ArBeauty!</h3>
+      <p>Pesanan kamu berhasil dikonfirmasi.</p>
+      <p>Metode pembayaran: ${method}</p>
+      ${method === 'Transfer Bank' ? `<p>Bank pilihan: ${bank}</p>` : ''}
+      <p>Total pesanan: ${rp(orderTotal)}</p>
+      <p>Sampai jumpa lagi di ArBeauty. Semoga kamu suka dengan produk pilihanmu!</p>
+      <p style="font-size:13px">
+        Catatan: Ini hanya demo. Tidak ada pembayaran sungguhan yang diproses.
+      </p>
+      <button class="btn" data-c style="width:100%">Selesai</button>
+    `);
+  }
+});
 dlg.addEventListener('click',e=>{if(e.target.id==='lo'){user=null;try{localStorage.removeItem('arUser')}catch{}dlg.close();draw();toast('Kamu sudah keluar')}});
 $('#nf').onsubmit=e=>{e.preventDefault();e.target.reset();toast('Terima kasih sudah berlangganan! 💌')};
 let cat='Semua',cat$=()=>{};
