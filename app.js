@@ -99,7 +99,7 @@ $('#ck').onclick = () => {
       </div>
 
       <p style="font-size:13px;margin-top:14px">
-        Pembayaran ini merupakan simulasi demo portofolio.
+        Pembayaran ini merupakan simulasi demo
         Tidak ada transaksi uang sungguhan yang diproses.
       </p>
 
