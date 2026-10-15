@@ -57,7 +57,60 @@ document.addEventListener('click',e=>{const t=e.target.closest('button,a');if(!t
 $('#cb').onclick=()=>cd(true);$('#ov').onclick=()=>cd(false);
 document.addEventListener('keydown',e=>e.key==='Escape'&&cd(false));
 $('#mb').onclick=()=>$('#nv').classList.toggle('on');
-$('#ck').onclick=()=>{if(!Object.keys(cart).length)return toast('Keranjang masih kosong');const t=total();cart={};save();cd(false);show(`<h3>Pesanan Diterima 🎉</h3><p>Terima kasih sudah berbelanja di Arbeauty${user?', '+user.name.split(' ')[0]:''}! Total pembayaran <b>${rp(t)}</b></p><button class="btn" data-c style="width:100%">Tutup</button>`)};
+
+$('#ck').onclick = () => {
+  if (!Object.keys(cart).length) {
+    return toast('Keranjang masih kosong');
+  }
+
+  const t = total();
+
+  cd(false);
+
+  show(`
+    <h3>Checkout ArBeauty</h3>
+    <p>Silakan pilih metode pembayaran.</p>
+
+    <div class="tot" style="margin:16px 0">
+      <span>Total Belanja</span>
+      <strong>${rp(t)}</strong>
+    </div>
+
+    <form id="pf">
+      <label for="pm"><strong>Metode Pembayaran</strong></label>
+      <select class="fi" id="pm" name="method" required>
+        <option value="">-- Pilih Pembayaran --</option>
+        <option value="Transfer Bank">Transfer Bank</option>
+        <option value="DANA">DANA</option>
+        <option value="GoPay">GoPay</option>
+        <option value="OVO">OVO</option>
+        <option value="COD">COD (Bayar di Tempat)</option>
+      </select>
+
+      <div id="bankWrap" hidden style="margin-top:12px">
+        <label for="bank"><strong>Pilih Bank</strong></label>
+        <select class="fi" id="bank" name="bank">
+          <option value="">-- Pilih Bank --</option>
+          <option value="BCA">BCA</option>
+          <option value="BRI">BRI</option>
+          <option value="BNI">BNI</option>
+          <option value="Mandiri">Mandiri</option>
+        </select>
+      </div>
+
+      <p style="font-size:13px;margin-top:14px">
+        Pembayaran ini merupakan simulasi demo portofolio.
+        Tidak ada transaksi uang sungguhan yang diproses.
+      </p>
+
+      <button class="btn" type="submit"
+        style="width:100%;margin-top:12px">
+        Konfirmasi Pesanan
+      </button>
+    </form>
+  `);
+};
+
 $('#ub').onclick=()=>user?show(`<h3>Halo, ${user.name}!</h3><p>${user.email}</p><button class="btn o" id="lo" style="width:100%">Keluar</button>`):show(`<h3>Masuk / Daftar</h3><p>Buat akun demo untuk pengalaman belanja yang lebih personal.</p><form id="af"><input class="fi" name="n" placeholder="Nama lengkap" required><input class="fi" name="e" type="email" placeholder="Email" required><button class="btn">Lanjutkan</button></form>`);
 dlg.addEventListener('submit',e=>{if(e.target.id==='af'){e.preventDefault();const f=new FormData(e.target);user={name:f.get('n').trim(),email:f.get('e').trim()};sv('arUser',user);dlg.close();draw();toast(`Selamat datang, ${user.name.split(' ')[0]}!`)}});
 dlg.addEventListener('click',e=>{if(e.target.id==='lo'){user=null;try{localStorage.removeItem('arUser')}catch{}dlg.close();draw();toast('Kamu sudah keluar')}});
