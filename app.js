@@ -105,7 +105,7 @@ $('#ck').onclick = () => {
 
       <button class="btn" type="submit"
         style="width:100%;margin-top:12px">
-        Konfirmasi Pesanan
+        Konfirmasi Pesanans
       </button>
     </form>
   `);
